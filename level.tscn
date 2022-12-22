@@ -1,11 +1,13 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://cubelib.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://player/cubio.tscn" type="PackedScene" id=2]
 [ext_resource path="res://models/cube.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://test_texture_water.png" type="Texture" id=4]
 [ext_resource path="res://models/mushroom.glb" type="PackedScene" id=5]
 [ext_resource path="res://level.gd" type="Script" id=6]
 [ext_resource path="res://cube_rigidbody.tscn" type="PackedScene" id=7]
+[ext_resource path="res://flowmapplusnoise.png" type="Texture" id=8]
 
 [sub_resource type="BoxShape" id=1]
 margin = 0.001
@@ -44,6 +46,34 @@ tracks/0/keys = {
 }
 
 [sub_resource type="BoxShape" id=4]
+
+[sub_resource type="PlaneMesh" id=5]
+
+[sub_resource type="Shader" id=6]
+code = "shader_type spatial;
+
+uniform sampler2D diffusetex;
+uniform sampler2D flowmap;
+uniform float flow_strength;
+uniform float flow_speed;
+void fragment()
+{
+	vec3 flow = texture(flowmap, UV).rgb;
+	flow.xy = flow.xy * 2.0 - 1.0;
+	flow *= flow_strength;
+	float noise = texture(flowmap, UV).a;
+	float time = TIME * flow_speed + noise;
+	vec2 uvA = UV + time;
+	ALBEDO = texture(diffusetex, uvA).rgb;
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/flow_strength = 0.0
+shader_param/flow_speed = 0.1
+shader_param/diffusetex = ExtResource( 4 )
+shader_param/flowmap = ExtResource( 8 )
 
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
@@ -121,6 +151,13 @@ autostart = true
 
 [node name="cube_rigidbody" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.416964, 3.3565, 2.6332 )
+
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="CSGMesh" type="CSGMesh" parent="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85164, 1.11659, 2.14606 )
+mesh = SubResource( 5 )
+material = SubResource( 7 )
 
 [connection signal="body_entered" from="Princess" to="Cubio" method="_on_tcube_body_entered"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
