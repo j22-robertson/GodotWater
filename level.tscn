@@ -3,7 +3,7 @@
 [ext_resource path="res://cubelib.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://player/cubio.tscn" type="PackedScene" id=2]
 [ext_resource path="res://models/cube.mesh" type="ArrayMesh" id=3]
-[ext_resource path="res://test_texture_water.png" type="Texture" id=4]
+[ext_resource path="res://water.png" type="Texture" id=4]
 [ext_resource path="res://models/mushroom.glb" type="PackedScene" id=5]
 [ext_resource path="res://level.gd" type="Script" id=6]
 [ext_resource path="res://cube_rigidbody.tscn" type="PackedScene" id=7]
@@ -50,15 +50,22 @@ tracks/0/keys = {
 [sub_resource type="BoxShape" id=4]
 
 [sub_resource type="PlaneMesh" id=5]
+size = Vector2( 20, 20 )
+subdivide_width = 100
+subdivide_depth = 100
 
 [sub_resource type="ShaderMaterial" id=7]
 shader = ExtResource( 10 )
+shader_param/WaveA = Plane( 1, 2, 0.03, 8 )
+shader_param/WaveB = Plane( 1, 1, 0.05, 4 )
+shader_param/WaveC = Plane( 1.5, 0, 0.1, 1 )
 shader_param/flow_strength = 0.5
 shader_param/flow_speed = 0.2
 shader_param/height_scale = 0.1
 shader_param/height_scale_modulated = 0.15
 shader_param/jump_a = 0.1
 shader_param/jump_b = 0.25
+shader_param/color = Plane( 1, 19, 20, 255 )
 shader_param/diffusetex = ExtResource( 4 )
 shader_param/flowmap = ExtResource( 8 )
 shader_param/heightmap = ExtResource( 9 )
@@ -140,10 +147,10 @@ autostart = true
 [node name="cube_rigidbody" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.416964, 3.3565, 2.6332 )
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="Water" type="Spatial" parent="."]
 
-[node name="CSGMesh" type="CSGMesh" parent="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.556952, 1.6117, 5.61794 )
+[node name="CSGMesh" type="CSGMesh" parent="Water"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.54322, 0.580471, 18.3256 )
 mesh = SubResource( 5 )
 material = SubResource( 7 )
 
