@@ -1,15 +1,13 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://cubelib.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://player/cubio.tscn" type="PackedScene" id=2]
 [ext_resource path="res://models/cube.mesh" type="ArrayMesh" id=3]
-[ext_resource path="res://water.png" type="Texture" id=4]
+[ext_resource path="res://ws2.tres" type="Material" id=4]
 [ext_resource path="res://models/mushroom.glb" type="PackedScene" id=5]
 [ext_resource path="res://level.gd" type="Script" id=6]
 [ext_resource path="res://cube_rigidbody.tscn" type="PackedScene" id=7]
-[ext_resource path="res://flowmapplusnoise.png" type="Texture" id=8]
-[ext_resource path="res://water-derivative-height.png" type="Texture" id=9]
-[ext_resource path="res://watershader.tres" type="Shader" id=10]
+[ext_resource path="res://collisionmesh.tres" type="PlaneMesh" id=11]
 
 [sub_resource type="BoxShape" id=1]
 margin = 0.001
@@ -50,25 +48,13 @@ tracks/0/keys = {
 [sub_resource type="BoxShape" id=4]
 
 [sub_resource type="PlaneMesh" id=5]
-size = Vector2( 20, 20 )
-subdivide_width = 100
-subdivide_depth = 100
+subdivide_width = 1
+subdivide_depth = 1
 
-[sub_resource type="ShaderMaterial" id=7]
-shader = ExtResource( 10 )
-shader_param/WaveA = Plane( 1, 2, 0.03, 8 )
-shader_param/WaveB = Plane( 1, 1, 0.05, 4 )
-shader_param/WaveC = Plane( 1.5, 0, 0.1, 1 )
-shader_param/flow_strength = 0.5
-shader_param/flow_speed = 0.2
-shader_param/height_scale = 0.1
-shader_param/height_scale_modulated = 0.15
-shader_param/jump_a = 0.1
-shader_param/jump_b = 0.25
-shader_param/color = Plane( 1, 19, 20, 255 )
-shader_param/diffusetex = ExtResource( 4 )
-shader_param/flowmap = ExtResource( 8 )
-shader_param/heightmap = ExtResource( 9 )
+[sub_resource type="CubeMesh" id=6]
+subdivide_width = 2
+subdivide_height = 2
+subdivide_depth = 2
 
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
@@ -150,9 +136,27 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.416964, 3.3565, 2.6332 )
 [node name="Water" type="Spatial" parent="."]
 
 [node name="CSGMesh" type="CSGMesh" parent="Water"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.54322, 0.580471, 18.3256 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.646814, 14.1207, 9.42786 )
 mesh = SubResource( 5 )
-material = SubResource( 7 )
+material = ExtResource( 4 )
+
+[node name="Node" type="Node" parent="."]
+
+[node name="water" type="CSGMesh" parent="Node"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945937, 12.4249 )
+mesh = ExtResource( 11 )
+material = ExtResource( 4 )
+
+[node name="StaticBody" type="StaticBody" parent="Node/water"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Node/water"]
+
+[node name="Node2" type="Node" parent="."]
+
+[node name="CSGMesh" type="CSGMesh" parent="Node2"]
+transform = Transform( 1, 0, 0, 0, 0.999982, 0.0060039, 0, -0.0060039, 0.999982, -1.17019, 4.86059, 6.62819 )
+mesh = SubResource( 6 )
+material = ExtResource( 4 )
 
 [connection signal="body_entered" from="Princess" to="Cubio" method="_on_tcube_body_entered"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
