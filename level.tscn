@@ -147,10 +147,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945937, 12.4249 )
 mesh = ExtResource( 11 )
 material = ExtResource( 4 )
 
-[node name="StaticBody" type="StaticBody" parent="Node/water"]
-
-[node name="CollisionShape" type="CollisionShape" parent="Node/water"]
-
 [node name="Node2" type="Node" parent="."]
 
 [node name="CSGMesh" type="CSGMesh" parent="Node2"]
