@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://cubelib.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://player/cubio.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://models/mushroom.glb" type="PackedScene" id=5]
 [ext_resource path="res://level.gd" type="Script" id=6]
 [ext_resource path="res://cube_rigidbody.tscn" type="PackedScene" id=7]
+[ext_resource path="res://water.gd" type="Script" id=8]
 [ext_resource path="res://collisionmesh.tres" type="PlaneMesh" id=11]
 
 [sub_resource type="BoxShape" id=1]
@@ -143,16 +144,35 @@ material = ExtResource( 4 )
 [node name="Node" type="Node" parent="."]
 
 [node name="water" type="CSGMesh" parent="Node"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945937, 12.4249 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.460281, 2.98366, 9.46602 )
 mesh = ExtResource( 11 )
 material = ExtResource( 4 )
+script = ExtResource( 8 )
 
 [node name="Node2" type="Node" parent="."]
 
-[node name="CSGMesh" type="CSGMesh" parent="Node2"]
-transform = Transform( 1, 0, 0, 0, 0.999982, 0.0060039, 0, -0.0060039, 0.999982, -1.17019, 4.86059, 6.62819 )
+[node name="Spatial" type="Spatial" parent="Node2"]
+
+[node name="Area" type="Area" parent="Node2/Spatial"]
+
+[node name="CSGMesh" type="CSGMesh" parent="Node2/Spatial"]
+transform = Transform( 1, 0, 0, 0, 0.999982, 0.0060039, 0, -0.0060039, 0.999982, 0.764822, 3.42285, 5.46652 )
 mesh = SubResource( 6 )
 material = ExtResource( 4 )
+
+[node name="Spatial" type="Spatial" parent="Node2/Spatial/CSGMesh"]
+
+[node name="Node3" type="Node" parent="."]
+
+[node name="Spatial" type="Spatial" parent="Node3"]
+
+[node name="CSGBox" type="CSGBox" parent="Node3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.19089, 4.32246 )
+width = 118.064
+height = 4.996
+depth = 72.013
+
+[node name="Area" type="Area" parent="Node3/CSGBox"]
 
 [connection signal="body_entered" from="Princess" to="Cubio" method="_on_tcube_body_entered"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]

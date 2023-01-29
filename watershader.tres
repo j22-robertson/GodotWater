@@ -77,7 +77,7 @@ vec3 flowUVW(vec2 uv, vec2 flow_vector, vec2 jump, float flow_offset, float time
 	float phaseOffset = flow_b ? 0.5: 0.0;
 	float progress = fract(time + phaseOffset);
 	vec3 uvw;
-	uvw.xy = uv - flow_vector * (progress * flow_offset);
+	uvw.xy = uv - flow_vector * (progress + flow_offset);
 	uvw.xy *= tiling;
 	uvw.xy += phaseOffset;
 	uvw.xy += (time - progress) * jump;
@@ -136,10 +136,18 @@ void fragment()
 	vec4 background = textureLod(SCREEN_TEXTURE, SCREEN_UV,0.0);
 	vec4 fincol = mix(background, col, color_mix);
 	ALBEDO = mix(fincol.rgb, fogcolor.rgb,fog);
-	EMISSION = ALBEDO;
-	SPECULAR = 0.8;
+	
+	//EMISSION = ALBEDO;
+	SPECULAR = 0.856;
 	ALPHA = color_mix.a;
-	NORMALMAP.xy = normalize(-(dhA.xy + dhB.xy));
+	vec2 dhaC;
+	dhaC.x = dhA.x;
+	dhaC.y = -dhA.y;
+	vec2 dhaB;
+	dhaB.x = dhB.x;
+	dhaB.y = -dhB.y;
+	NORMALMAP.xy = normalize(-(dhaC.xy + dhaB.xy));
+	//NORMALMAP.xy = normalize(-(dhA.xy + dhB.xy));
 	NORMALMAP.z = 1.0;
 	
 	}"

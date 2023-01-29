@@ -7,17 +7,17 @@
 
 [resource]
 shader = ExtResource( 4 )
-shader_param/color_mix = Color( 0.121569, 0.576471, 0.894118, 1 )
+shader_param/color_mix = Color( 0.0901961, 0.788235, 1, 1 )
 shader_param/WaveA = Plane( 1, 1, 0.01, 1 )
-shader_param/WaveB = Plane( -1, -2, 0.1, 4 )
-shader_param/WaveC = Plane( 1.5, 0, 0.1, 1 )
+shader_param/WaveB = Plane( -1, -2, 0.1, 5 )
+shader_param/WaveC = Plane( 1.5, 0, 0.1, 5 )
 shader_param/flow_strength = 0.1
 shader_param/flow_speed = 0.5
 shader_param/height_scale = 0.25
 shader_param/height_scale_modulated = 0.75
 shader_param/jump_a = 0.25
-shader_param/jump_b = 0.1
-shader_param/tiling = 10.0
+shader_param/jump_b = 0.5
+shader_param/tiling = 1.0
 shader_param/color = Plane( 0.2, 0.32, 1, 255 )
 shader_param/fogginess = 0.1
 shader_param/fogcolor = Plane( 0.095, 0.5, 0.85, 1 )
