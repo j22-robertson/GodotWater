@@ -3,12 +3,14 @@
 [resource]
 code = "shader_type spatial;
 
-render_mode specular_schlick_ggx, depth_draw_opaque, cull_back, blend_mix, diffuse_burley, shadows_disabled;
-
+render_mode  depth_draw_opaque,cull_back, blend_mix, shadows_disabled, specular_schlick_ggx, diffuse_lambert;
+//
 uniform vec4 color_mix: hint_color = vec4(0.106, 0.874, 0.690, 0.968);
+uniform vec4 water_color: hint_color = vec4(0.0,0.0,0.0,0.0);
 uniform vec4 WaveA;
 uniform vec4 WaveB;
 uniform vec4 WaveC;
+varying mat4 CAMERA;
 
 vec3 GerstnerFunction(vec4 wave, vec3 point, inout vec3 tangent, inout vec3 binormal)
 {
@@ -40,15 +42,17 @@ vec3 GerstnerFunction(vec4 wave, vec3 point, inout vec3 tangent, inout vec3 bino
 
 void vertex()
 {
+	CAMERA = CAMERA_MATRIX;
 	/*
 	vec3 gridpoint = VERTEX.xyz;
-	vec3 tangent = vec3(0,0,0);
-	vec3 binormal = vec3(0,0,0);
+	vec3 tangent = vec3(1,0,0);
+	vec3 binormal = vec3(0,0,1);
 	vec3 p = gridpoint;
 	p+= GerstnerFunction(WaveA, gridpoint, tangent, binormal);
 	p+= GerstnerFunction(WaveB, gridpoint, tangent, binormal);
 	p+= GerstnerFunction(WaveC, gridpoint, tangent, binormal);
 	vec3 normal = normalize(cross(binormal, tangent));
+	vec3 alterednormal = vec3(normal.x, -normal.y, normal.z);
 	VERTEX = p.xyz;
 	NORMAL = normal;*/
 }
@@ -99,7 +103,7 @@ void fragment()
 	flow *= flow_strength;
 	float noise = texture(flowmap, UV).a;
 	float time = TIME * flow_speed + noise;
-	vec2 uvT = UV + time;
+	//vec2 uvT = UV + time;
 	
 	vec2 jump;
 	jump.x = jump_a;
@@ -115,39 +119,45 @@ void fragment()
 	vec3 dhA = unpackHeight(texture(heightmap, uvwA.xy)) * (uvwA.z * f_height_scale);
 	vec3 dhB = unpackHeight(texture(heightmap,uvwB.xy)) * (uvwB.z * f_height_scale);
 	
-	vec4 col = normalize(texcol1 + texcol2) * color;
+	vec4 col = (texcol1 + texcol2) * water_color;
 	
 	
 	
-	float depth = textureLod(DEPTH_TEXTURE, SCREEN_UV,0.0).x;
+	float depth = texture(DEPTH_TEXTURE, SCREEN_UV,0.0).x;
 	vec4 dpos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
     vec3 pos = dpos.xyz / dpos.w;
-
     vec3 ndc = vec3(SCREEN_UV, depth) * 2.0 - 1.0;
     vec4 view = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
     view.xyz /= view.w;
     float linear_depth = -view.z;
     float fog = exp2(-fogginess * (linear_depth - pos.z));
-	
-	
-	
-	
-	
 	vec4 background = textureLod(SCREEN_TEXTURE, SCREEN_UV,0.0);
-	vec4 fincol = mix(background, col, color_mix);
-	ALBEDO = mix(fincol.rgb, fogcolor.rgb,fog);
+	vec4 fincol = mix(col,background , fog);
 	
+	
+	//float depthdiff = linear_depth - surface;
+
+	//ALBEDO = water_color.rgb; //col.rgb; //fincol.rgb;//mix(fincol.rgb, fogcolor.rgb,fog);
+	//ALBEDO = fincol.rgb;//vec3(linear_depth - pos.z);//mix(fincol.rgb, fogcolor.rgb, fog);
 	//EMISSION = ALBEDO;
-	SPECULAR = 0.856;
-	ALPHA = color_mix.a;
+	//SPECULAR = 0.0f;
+	ALBEDO = fincol.rgb;
+	EMISSION = fincol.rgb + (1.0-COLOR.a);
+	
+	//ALPHA = color_mix.a;
 	vec2 dhaC;
 	dhaC.x = dhA.x;
 	dhaC.y = -dhA.y;
 	vec2 dhaB;
 	dhaB.x = dhB.x;
 	dhaB.y = -dhB.y;
-	NORMALMAP.xy = normalize(-(dhaC.xy + dhaB.xy));
-	//NORMALMAP.xy = normalize(-(dhA.xy + dhB.xy));
-	NORMALMAP.z = 1.0;
+	SPECULAR = 0.9f;
+
+	//CLEARCOAT_GLOSS = 0.8;
+	//CLEARCOAT = 0.8;
+	//NORMALMAP.xyz = normalize(vec3(-(dhA.xy + dhB.xy),1.0f));
+	//NORMALMAP_DEPTH = 0.9;
+	NORMALMAP.xyz = normalize(vec3(-(dhaC.xy + dhaB.xy),1.0f) + NORMAL)/2.0;
+	//NORMALMAP.z = 1.0;
 	
 	}"
