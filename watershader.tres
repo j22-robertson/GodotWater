@@ -133,8 +133,6 @@ void fragment()
     float fog = exp2(-fogginess * (linear_depth - pos.z));
 	vec4 background = textureLod(SCREEN_TEXTURE, SCREEN_UV,0.0);
 	vec4 fincol = mix(col,background , fog);
-	
-	
 	//float depthdiff = linear_depth - surface;
 
 	//ALBEDO = water_color.rgb; //col.rgb; //fincol.rgb;//mix(fincol.rgb, fogcolor.rgb,fog);

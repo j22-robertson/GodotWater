@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://cubelib.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://player/cubio.tscn" type="PackedScene" id=2]
@@ -7,8 +7,7 @@
 [ext_resource path="res://models/mushroom.glb" type="PackedScene" id=5]
 [ext_resource path="res://level.gd" type="Script" id=6]
 [ext_resource path="res://cube_rigidbody.tscn" type="PackedScene" id=7]
-[ext_resource path="res://water.gd" type="Script" id=8]
-[ext_resource path="res://collisionmesh.tres" type="PlaneMesh" id=11]
+[ext_resource path="res://WaterObject.tscn" type="PackedScene" id=8]
 
 [sub_resource type="BoxShape" id=1]
 margin = 0.001
@@ -137,13 +136,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11781, 14.5105, 9.20588 )
 mesh = SubResource( 5 )
 material = ExtResource( 4 )
 
-[node name="Node" type="Node" parent="."]
-
-[node name="water" type="CSGMesh" parent="Node"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23625, 0.987349, 8.1229 )
-mesh = ExtResource( 11 )
-material = ExtResource( 4 )
-script = ExtResource( 8 )
+[node name="WaterObject" parent="." instance=ExtResource( 8 )]
 
 [node name="Node2" type="Node" parent="."]
 
