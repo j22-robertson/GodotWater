@@ -49,5 +49,5 @@ func _process(delta):
 	material.set_shader_param("fogginess", fogginess)
 	material.set_shader_param("fogcolor", fogcolor)
 	material.set_shader_param("water_color", water_color)
-	
+
 	

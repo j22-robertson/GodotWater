@@ -130,6 +130,7 @@ autostart = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.08417, 0.696385, 2.6332 )
 
 [node name="w" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.511482, -0.705323, 4.49457 )
 
 [node name="CSGMesh" type="CSGMesh" parent="w"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11781, 14.5105, 9.20588 )
@@ -141,6 +142,7 @@ material = ExtResource( 4 )
 [node name="Node2" type="Node" parent="."]
 
 [node name="Spatial" type="Spatial" parent="Node2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.20788 )
 
 [node name="Area" type="Area" parent="Node2/Spatial"]
 
@@ -153,6 +155,7 @@ material = ExtResource( 4 )
 [node name="Node3" type="Node" parent="."]
 
 [node name="Spatial" type="Spatial" parent="Node3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30823, 0, 0 )
 
 [node name="CSGBox" type="CSGBox" parent="Node3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786972, -11.882, 4.32246 )
@@ -171,7 +174,7 @@ depth = 1.033
 [node name="Area" type="Area" parent="Node3/CSGBox/CSGBox"]
 
 [node name="CSGBox2" type="CSGBox" parent="Node3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.98855, 12.6787 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10972, -3.24964, 13.0996 )
 
 [node name="CSGBox2" type="CSGBox" parent="Node3/CSGBox2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.39273, 1.72805, 0 )
